@@ -1,0 +1,27 @@
+<!-- templates/base.html -->
+{% load static %}
+<!DOCTYPE html>
+<html lang="it" style="margin: 0;">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Meetee{% endblock %}</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
+</head>
+<body style="overflow: hidden;margin:0" class="bg-dark-100 dark:bg-gray-900 text-gray-800 dark:text-gray-100">
+    <div>
+        {% if messages %}
+            <div class="mb-4">
+                {% for message in messages %}
+                    <div class="p-4 mb-2 rounded {{ message.tags }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+        {% block content %}
+        {% endblock %}
+    </div>
+    {% block extra_js %}
+    {% endblock %}
+</body>
+</html>
