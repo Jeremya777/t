@@ -10,7 +10,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.csrf import csrf_exempt, csrf_protect
 from formtools.wizard.views import SessionWizardView
 from django.views.decorators.http import require_GET
 from .models import Profile
@@ -23,7 +23,7 @@ from django.http import JsonResponse
 
 
 
-
+@csrf_protect
 class RegisterWizard(SessionWizardView):
     template_name = 'accounts/register_wizard.html'
     form_list = [RegisterStep1Form, RegisterStep2Form, RegisterStep3Form]
@@ -63,6 +63,7 @@ def verify_email(request, token):
 
 
 # Funzione di Login aggiornata
+@csrf_protect
 class LoginWizard(SessionWizardView):
     template_name = 'accounts/login_wizard.html'
     form_list = [LoginStep1Form, LoginStep2Form]
@@ -176,7 +177,7 @@ def find_active_user(request):
     else:
         return JsonResponse({'status': 'fail', 'message': 'No active users available'})
 
-@csrf_exempt
+@csrf_protect
 @login_required
 def send_connection_request(request):
     if request.method == 'POST':
@@ -205,7 +206,7 @@ def send_connection_request(request):
     return JsonResponse({'success': False, 'message': 'Metodo non supportato.'})
 
 
-@csrf_exempt
+@csrf_protect
 @login_required
 def accept_connection(request, from_user_id):
     if request.method == 'POST':
@@ -245,7 +246,7 @@ def accept_connection(request, from_user_id):
         return JsonResponse({'success': True, 'room_name': room_name})
     return JsonResponse({'success': False, 'message': 'Metodo non supportato.'})
 
-@csrf_exempt
+@csrf_protect
 @login_required
 def reject_connection(request, from_user_id):
     if request.method == 'POST':
