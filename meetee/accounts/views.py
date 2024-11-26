@@ -10,6 +10,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.views import View
 from django.views.decorators.csrf import csrf_exempt, csrf_protect
 from formtools.wizard.views import SessionWizardView
 from django.views.decorators.http import require_GET
@@ -19,12 +20,12 @@ from .tasks import send_verification_email
 from django.utils.crypto import get_random_string
 from .forms import PersonalDataForm, CharacteristicsForm
 from django.http import JsonResponse
-
+from django.views.decorators.csrf import CsrfViewMiddleware, csrf_protect
 
 
 
 @csrf_protect
-class RegisterWizard(SessionWizardView):
+class RegisterWizard(View):
     template_name = 'accounts/register_wizard.html'
     form_list = [RegisterStep1Form, RegisterStep2Form, RegisterStep3Form]
 
